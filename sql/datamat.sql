@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 4.6.5.2
+-- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 05, 2018 at 02:26 PM
--- Server version: 10.1.16-MariaDB
--- PHP Version: 7.0.9
+-- Generation Time: Jun 05, 2018 at 02:32 PM
+-- Server version: 10.1.21-MariaDB
+-- PHP Version: 5.6.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -61,7 +61,8 @@ INSERT INTO `datam` (`ID`, `NAMA`, `SKS`, `JAM_AWAL`, `JAM_AKHIR`, `DOSEN`) VALU
 (19, 'PRAKTIKUM SISTEM OPERASI', 1, '03:00', '05:00', ''),
 (20, 'PROGRAM DASAR 2', 3, '08:00', '10:00', ''),
 (21, 'PRAKTIKUM PROGRAM DASAR 2', 1, '01:00', '03:00', ''),
-(22, 'ALGORITMA DAN STRUKTUR DATA 2', 3, '10:00', '12:00', '');
+(22, 'ALGORITMA DAN STRUKTUR DATA 2', 3, '10:00', '12:00', ''),
+(23, 'ARTIFICIAL INTELEGENCE', 3, '08:00', '10:00', '');
 
 --
 -- Indexes for dumped tables
@@ -81,7 +82,7 @@ ALTER TABLE `datam`
 -- AUTO_INCREMENT for table `datam`
 --
 ALTER TABLE `datam`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
