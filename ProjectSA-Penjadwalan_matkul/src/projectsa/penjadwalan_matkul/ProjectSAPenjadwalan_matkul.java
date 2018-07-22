@@ -16,6 +16,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
+import java.util.Stack;
 class dfs{
     String nama;
     int jam,opsi;
@@ -106,7 +107,9 @@ public class ProjectSAPenjadwalan_matkul {
             tampung2 = new ArrayList<MatKul>();
             DFS = new ArrayList<dfs>();
         }
-
+        public int getTampung() {
+                return tampung2.size();
+        }
         public void isiData(int id, String nama, String sks, String awal, String akhir, String dosen)
         {
             if(tampung2.isEmpty()){
@@ -132,7 +135,7 @@ public class ProjectSAPenjadwalan_matkul {
 
         public void showData()
         {
-            
+            int x = 1;
             for(MatKul matkul:tampung2)
             {
                 try {
@@ -140,78 +143,201 @@ public class ProjectSAPenjadwalan_matkul {
                     Connection conn = (Connection) DriverManager.getConnection(url, user, password);
                     Statement start = (Statement) conn.createStatement();
                     Statement start2 = (Statement) conn.createStatement();
-
-                        ResultSet rs = start.executeQuery("SELECT * FROM datam WHERE NAMA='"+matkul.getNama()+"' order by ID");
-                        int x = 1;
+                        ResultSet rs = start.executeQuery("SELECT * FROM `datam` WHERE NAMA = '"+matkul.getNama()+"' ORDER BY JAM_AWAL ASC");
+                        
                         while (rs.next()) {
                             int menit = 0;
                             String[] jamx = rs.getString("JAM_AWAL").split(":");
-                            System.out.println("id matkul : "+matkul.getId()+""+", Nama Matkul : "+matkul.getNama()+""+", Jam Awal : "+rs.getString("JAM_AWAL"));
+                            System.out.println("id matkul : "+matkul.getId()+""+", Nama Matkul : "+matkul.getNama()+""+", Jam Awal : "+rs.getString("JAM_AWAL")+" - "+x);
                             menit = Integer.parseInt(jamx[0]);
                             menit = menit*60;
                             menit = menit+Integer.parseInt(jamx[1]);
-                            
-                            if(DFS.isEmpty()){
-                                DFS.add(new dfs(matkul.getNama(),menit,x));
-                            }else{
-                                for(dfs xyz:DFS)
-                                {
-                                    if(matkul.getNama() == xyz.getNama()){
-                                        x = x+1;
-                                        break;
-                                    }else{
-                                        x=1;
-                                    }
-                                }
-                                DFS.add(new dfs(matkul.getNama(),menit,x));
-                            }
+                            DFS.add(new dfs(matkul.getNama(),menit,x));
                         }
                 } catch (Exception e) {
                     
                 }
+                
+                x=x+1;
             }
         }
         public void showData2()
         {
-            for(dfs xyz:DFS)
+            int x =0;
+            Stack<dfs> nodeStack = new Stack<>();
+            ArrayList<dfs> matkul1 = new ArrayList<>();
+            ArrayList<dfs> matkul2 = new ArrayList<>();
+            ArrayList<dfs> matkul3 = new ArrayList<>();
+            ArrayList<dfs> matkul4 = new ArrayList<>();
+            ArrayList<dfs> matkul5 = new ArrayList<>();
+            int angka1=0;
+            int angka2=0;
+            int angka3=0;
+            int angka4=0;
+            int angka5=0;
+            int loop = 1;
+            while(DFS.size()>x)
             {
-                /*
-                String realjam = "";
-                String realmin = "";
-                int x = xyz.getJam()/60;
-                int y = xyz.getJam()%60;
-                if(x<10){
-                    realjam = "0"+x;
-                }else{
-                    realjam = ""+x;
+                System.out.println(DFS.get(x).getOpsi());
+                if(DFS.get(x).getOpsi()==1){
+                    matkul1.add(DFS.get(x));
                 }
-                if(y<10){
-                    realmin = "0"+y;
-                }else{
-                    realmin = ""+y;
+                if(DFS.get(x).getOpsi()==2){
+                    matkul2.add(DFS.get(x));
                 }
-                String real= realjam+":"+realmin; 
-                System.out.println(xyz.getNama()+"  --  "+real+"  --  "+xyz.getOpsi());
-                */
-                String realjam = "";
-                String realmin = "";
-                int x = xyz.getJam()/60;
-                int y = xyz.getJam()%60;
-                if(x<10){
-                    realjam = "0"+x;
-                }else{
-                    realjam = ""+x;
+                if(DFS.get(x).getOpsi()==3){
+                    matkul3.add(DFS.get(x));
                 }
-                if(y<10){
-                    realmin = "0"+y;
-                }else{
-                    realmin = ""+y;
+                if(DFS.get(x).getOpsi()==4){
+                    matkul4.add(DFS.get(x));
                 }
-                String real= realjam+":"+realmin; 
-                System.out.println(xyz.getNama()+""+real+""+xyz.getOpsi());
-                
-                System.out.println(DFS.size());
+                if(DFS.get(x).getOpsi()==5){
+                    matkul5.add(DFS.get(x));
+                }
+                x++;
             }
+            while(loop<99){
+                if(loop == 1){
+                    if(matkul1.size()>angka1){
+                        nodeStack.add(matkul1.get(angka1) );
+                        System.out.println("add 1");
+
+                        loop=2;
+                    }
+                    else{
+
+                    }
+                }
+                if(loop == 2){
+                    if(matkul2.isEmpty()){
+                        break;
+                    }
+                    if(matkul2.size()>angka2){
+                        if(nodeStack.get(0).getJam()==matkul2.get(angka2).getJam()){
+                            angka2++;
+                        }
+                        else{
+                            nodeStack.add(matkul2.get(angka2) );
+                            System.out.println("add 2");
+
+                            loop=3;
+                        }
+                    }
+                    else{
+                       angka2=0;
+                       nodeStack.pop();
+                        System.out.println("pop 1");
+                       loop=1;
+                       angka1++;
+                    }
+                }
+                if(loop == 3){
+                    if(matkul3.isEmpty()){
+                        break;
+                    }
+                    if(matkul3.size()>angka3){
+                        if(nodeStack.get(1).getJam()==matkul3.get(angka3).getJam()){
+                            angka3++;
+                        }
+                        else if(nodeStack.get(0).getJam()==matkul3.get(angka3).getJam()){
+                            angka3++;
+                        }
+                        else{
+                            nodeStack.add(matkul3.get(angka3) );
+                            System.out.println("add 3");
+
+                            loop=4;
+                        }
+                    }
+                    else{
+                       angka3=0;
+                       nodeStack.pop();
+                        System.out.println("pop 2");
+                       loop=2;
+                       angka2++;
+                    }
+                }
+                if(loop == 4){
+                    if(matkul4.isEmpty()){
+                        break;
+                    }
+                    if(matkul4.size()>angka4){
+                        if(nodeStack.get(1).getJam()==matkul4.get(angka4).getJam()){
+                            angka4++;
+                        }
+                        else if(nodeStack.get(2).getJam()==matkul4.get(angka4).getJam()){
+                            angka4++;
+                        }
+                        else if(nodeStack.get(0).getJam()==matkul4.get(angka4).getJam()){
+                            angka4++;
+                        }
+                        else{
+                            nodeStack.add(matkul4.get(angka4) );
+                            System.out.println("add 4");
+
+                            loop=5;
+                        }
+                    }
+                    else{
+                       angka4=0;
+                       nodeStack.pop();
+                        System.out.println("pop 3");
+                       loop=3;
+                       angka3++;
+                    }
+                }
+                if(loop == 5){
+                    if(matkul5.isEmpty()){
+                        break;
+                    }
+                    if(matkul5.size()>angka5){
+                        if(nodeStack.get(1).getJam()==matkul5.get(angka5).getJam()){
+                            angka5++;
+                        }
+                        else if(nodeStack.get(2).getJam()==matkul5.get(angka5).getJam()){
+                            angka5++;
+                        }
+                        else if(nodeStack.get(3).getJam()==matkul5.get(angka5).getJam()){
+                            angka5++;
+                        }
+                        else if(nodeStack.get(0).getJam()==matkul5.get(angka5).getJam()){
+                            angka5++;
+                        }
+                        else{
+                            nodeStack.add(matkul5.get(angka5) );
+                            System.out.println("add 5");
+
+                            loop=99;
+                        }
+                    }
+                    else{
+                       angka5=0;
+                       nodeStack.pop();
+                        System.out.println("pop 4");
+                       loop=4;
+                       angka4++;
+                    }
+                }
+            }
+            
+                for(dfs hasil:nodeStack){
+                    String realjam = "";
+                    String realmin = "";
+                    int xa = hasil.getJam()/60;
+                    int ya = hasil.getJam()%60;
+                    if(xa<10){
+                        realjam = "0"+xa;
+                    }else{
+                        realjam = ""+xa;
+                    }
+                    if(ya<10){
+                        realmin = "0"+ya;
+                    }else{
+                        realmin = ""+ya;
+                    }
+                    String real= realjam+":"+realmin; 
+                    System.out.println(hasil.getNama()+" "+real+" "+hasil.getOpsi());
+                }
         }
         }
         class TampilData{
@@ -223,6 +349,8 @@ public class ProjectSAPenjadwalan_matkul {
             //instansiasi
             tampung = new ArrayList<MatKul>();
         }
+
+            
 
         public void isiData(int id, String nama, String sks, String awal, String akhir, String dosen)
         {
@@ -263,8 +391,8 @@ public class ProjectSAPenjadwalan_matkul {
             System.err.println(e.getMessage());
         }
         
-     int loop = 0;
-     while(loop == 0){
+     int loop = 1;
+     while(loop != 0){
         td.showData();
          System.out.println("Pilih kode mata kuliah yang akan diambil :");
          int kode;
@@ -273,11 +401,21 @@ public class ProjectSAPenjadwalan_matkul {
          System.out.println("Memilih mata kuliah lagi?");
          String tanya;
          tanya = input.next();
+         
          if(tanya.equals("n") || tanya.equals("N")){
              td.td2.showData();
              td.td2.showData2();
-             loop = 1;
              break;
+         }
+         else if(tanya.equals("y") || tanya.equals("Y")){
+         if(td.td2.getTampung()==5){
+           td.td2.showData();
+             td.td2.showData2();
+             break;  
+         }
+         }
+         else{
+             System.out.println("Inputan salah!!");
          }
      }
     }
